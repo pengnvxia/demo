@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.yangkai.spring.demo.mapper.UserMapper">
+
+    <insert id="save" parameterType="Users">
+        insert into users
+        (`username`, `password`,`is_del`)
+        values
+        (
+        #{username},#{password},${isDel}
+        )
+    </insert>
+
+    <select id="getUserByUsernameAndPassword" parameterType="Users" resultType="Users">
+        select `id`, `username` as username, `password` as password,
+        `is_del` as isDel
+        from users
+        where `username`=#{username}
+    </select>
+
+    <insert id="savePpk" parameterType="Ppk">
+        insert into key
+        (`public_key`,`private_key`)
+        values
+        (
+        #{public_key},#{private_key}
+        )
+    </insert>
+
+    <select id="getPrivateKeyByVersion" parameterType="Integer" resultType="Ppk">
+        select `private_key` as private_key,`public_key` as public_key,`id` as id,`version` as version
+        from
+        `key`
+        where `version`=#{version}
+    </select>
+
+    <select id="getPublicPrivateKey" resultType="Ppk">
+        select `public_key` as public_key,`private_key` as private_key,`version` as version,`id` as id
+        from
+        `key`
+        order by `id` desc limit 1
+    </select>
+
+    <select id="getVersion" resultType="Integer">
+        select `version` as version
+        from
+        `key`
+        order by `version` desc limit 1
+    </select>
+
+    <select id="getUserByUserName" parameterType="String" resultType="Integer">
+        select count(id)
+        from
+        `users`
+        where  `username`=#{username}
+    </select>
+
+</mapper>

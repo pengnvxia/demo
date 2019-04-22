@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.yangkai.spring.demo.mapper.SessionMapper">
+
+    <update id="saveSession" parameterType="Session">
+        insert into `session` (`user_id`,`session_id`)
+        values (#{user_id},#{session_id})
+        on duplicate key update
+        `session_id`=#{session_id}
+    </update>
+
+    <select id="getUserBySessionId" parameterType="String" resultType="Users">
+        select `id`, `username` as username, `password` as password,
+        `is_del` as isDel
+        from `users` inner join `session` on `session_id`=#{session_id}
+        where `users`.`id`=`session`.`user_id`
+    </select>
+
+    <delete id="deleteSession" parameterType="String">
+        delete from `session`
+        where `session_id`=#{session_id}
+    </delete>
+</mapper>
